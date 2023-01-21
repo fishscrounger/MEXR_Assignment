@@ -49,12 +49,10 @@ public class Projectile : MonoBehaviour
 
             SlicedHull hull = gameObject.Slice(plane, mat);
 
-            if (hull != null)
-            {
+            if (hull == null)
                 hull = gameObject.Slice(transform.position, transform.up, mat); //slicing failed with the plane. Just cut it in half
-            }
 
-            if (hull != null)   //if still null, there's an issue. Make object drop and give the player the points
+            if (hull == null)   //if still null, there's an issue. Make object drop and give the player the points
             {
                 Destroy(gameObject, 5);  //clean up after a few seconds
                 gameObject.GetComponent<Rigidbody>().useGravity = true;

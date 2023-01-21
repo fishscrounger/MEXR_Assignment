@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 
         IsPlaying = true;
 
-        SpawnFruit();
+        StartCoroutine(Spawn());
     }
 
     public void EndGame()
@@ -86,10 +86,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SpawnFruit()
+    IEnumerator Spawn()
+    {
+        while (IsPlaying)
+        {
+            SpawnFood();
+            yield return new WaitForSeconds(Random.Range(1.0f, 2.0f));
+        }
+    }
+
+    private void SpawnFood()
     {
         int RandObj = Random.Range(0, 19);
-        Vector3 RandPos = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(2.0f, 3.0f), 20.0f);
+        Vector3 RandPos = new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(1.0f, 3.5f), 20.0f);
 
         GameObject newSpawn = Instantiate(SpawnObjects[RandObj], RandPos, Quaternion.identity);
 
