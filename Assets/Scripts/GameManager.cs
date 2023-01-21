@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         {
             CurrentGameTime -= Time.deltaTime;
 
-            if(CurrentGameTime <= 0)
+            if(CurrentGameTime <= 0.0f)
             {
                 CurrentGameTime = 0.0f;
                 EndGame();
