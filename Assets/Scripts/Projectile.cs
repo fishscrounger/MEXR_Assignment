@@ -39,6 +39,9 @@ public class Projectile : MonoBehaviour
     {
         if (other.name == "LongSwordMesh")
         {
+            //play chopping sound
+            other.GetComponent<AudioSource>().Play();
+
             Vector3 exitingTopSwordPoint = other.transform.position + other.bounds.max;
 
             //Debug.Log("TopIn = " + TopSwordPoint + " Bottom In = " + BottomSwordPoint + " Top Out = " + exitingTopSwordPoint);
