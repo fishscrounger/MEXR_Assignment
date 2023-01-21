@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +9,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI ScoreUI;
     public TextMeshProUGUI MultiplierUI;
     public TextMeshProUGUI TimeUI;
+
+    public TextMeshProUGUI GameOverUI;
+    public Button QuitToMenuButton;
+    public Button PlayAgainButton;
 
     private float TotalScore;
     private float Multiplier;
@@ -84,9 +89,19 @@ public class GameManager : MonoBehaviour
         {
             Destroy(p.gameObject);
         }
+
+        //show game over screen
+        GameOverUI.gameObject.SetActive(true);
+        QuitToMenuButton.gameObject.SetActive(true);
+        PlayAgainButton.gameObject.SetActive(true);
     }
 
-    IEnumerator Spawn()
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+        IEnumerator Spawn()
     {
         while (IsPlaying)
         {
