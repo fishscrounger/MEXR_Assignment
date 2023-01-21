@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public Button QuitToMenuButton;
     public Button PlayAgainButton;
 
+    public TextMeshProUGUI TipUI;
+
     private float TotalScore;
     private float Multiplier;
     private int Combo;
@@ -24,6 +26,8 @@ public class GameManager : MonoBehaviour
     public float TotalGameTime;
     public float BaseHitScore;   //score given for hitting an object without the multiplier
     public GameObject[] SpawnObjects; //food prefabs, thrown at player
+
+    public string[] MotivationTips;
 
     void Start()
     {
@@ -77,6 +81,7 @@ public class GameManager : MonoBehaviour
         IsPlaying = true;
 
         StartCoroutine(Spawn());
+        StartCoroutine(ShowTips());
     }
 
     public void EndGame()
@@ -94,6 +99,9 @@ public class GameManager : MonoBehaviour
         GameOverUI.gameObject.SetActive(true);
         QuitToMenuButton.gameObject.SetActive(true);
         PlayAgainButton.gameObject.SetActive(true);
+
+        //hide tips
+        TipUI.gameObject.SetActive(false);
     }
 
     public void QuitGame()
@@ -101,7 +109,7 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-        IEnumerator Spawn()
+    IEnumerator Spawn()
     {
         while (IsPlaying)
         {
@@ -110,9 +118,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator ShowTips()
+    {
+        while (IsPlaying)
+        {
+            yield return new WaitForSeconds(10.0f); //show a new tip afetr ten seconds, and show it for five seconds to motivate the user
+
+            int RandObj = Random.Range(0, MotivationTips.Length - 1);
+            TipUI.gameObject.SetActive(true);
+            TipUI.text = MotivationTips[RandObj];
+
+            yield return new WaitForSeconds(5.0f);
+
+            TipUI.gameObject.SetActive(false);
+
+        }
+    }
+
     private void SpawnFood()
     {
-        int RandObj = Random.Range(0, 19);
+        int RandObj = Random.Range(0, SpawnObjects.Length - 1);
         Vector3 RandPos = new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(1.0f, 3.5f), 20.0f);
 
         GameObject newSpawn = Instantiate(SpawnObjects[RandObj], RandPos, Quaternion.identity);
