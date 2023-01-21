@@ -9,15 +9,15 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI MultiplierUI;
     public TextMeshProUGUI TimeUI;
 
-    private float totalScore;
-    private float multiplier;
-    private int combination;
+    private float TotalScore;
+    private float Multiplier;
+    private int Combo;
 
-    private bool isPlaying;
-    private float currentGameTime;
+    private bool IsPlaying;
+    private float CurrentGameTime;
 
-    public float totalGameTime;
-    public float baseHitScore;   //score given for hitting an object without the multiplier
+    public float TotalGameTime;
+    public float BaseHitScore;   //score given for hitting an object without the multiplier
     public GameObject[] SpawnObjects; //food prefabs, thrown at player
 
     void Start()
@@ -27,17 +27,17 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (isPlaying)
+        if (IsPlaying)
         {
-            currentGameTime -= Time.deltaTime;
+            CurrentGameTime -= Time.deltaTime;
 
-            if(currentGameTime <= 0)
+            if(CurrentGameTime <= 0)
             {
-                currentGameTime = 0.0f;
+                CurrentGameTime = 0.0f;
                 EndGame();
             }
 
-            TimeUI.text = "Time: " + currentGameTime;
+            TimeUI.text = "Time: " + (int)CurrentGameTime;
 
         }
     }
@@ -45,35 +45,54 @@ public class GameManager : MonoBehaviour
     public void ObjectHit()
     {
         //increase score and multiplier
-        totalScore += (baseHitScore * multiplier);
+        TotalScore += (BaseHitScore * Multiplier);
+        Multiplier = 1.0f + (1.0f - (float)Combo) * 0.05f;
 
-        multiplier = 1.0f + (1.0f - (float)combination) * 0.05f;
+        ScoreUI.text = "Score: " + (int)TotalScore;
+        MultiplierUI.text = "Multiplier: " + Multiplier.ToString("F2");
     }
     public void ObjectMissed()
     {
         //reset multiplier, combo broken
-        combination = 0;
+        Combo = 0;
+        Multiplier = 1.0f;
+        MultiplierUI.text = "Multiplier: 1";
     }
 
     public void StartGame()
     {
-        totalScore = 0.0f;
-        multiplier = 0.0f;
-        combination = 0;
+        TotalScore = 0.0f;
+        Multiplier = 1.0f;
+        Combo = 0;
+        CurrentGameTime = TotalGameTime;
+
+        ScoreUI.text = "Score: 0";
+        MultiplierUI.text = "Multiplier: 1";
+
+        IsPlaying = true;
+
+        SpawnFruit();
     }
 
     public void EndGame()
     {
-        isPlaying = false;
+        IsPlaying = false;
+
+        //clean up the projectiles, game is over
+        Projectile[] RemainingProjectiles = FindObjectsOfType<Projectile>();
+        foreach (Projectile p in RemainingProjectiles)
+        {
+            Destroy(p.gameObject);
+        }
     }
 
     private void SpawnFruit()
     {
-        int RandObj = Random.Range(0, 10);
+        int RandObj = Random.Range(0, 19);
+        Vector3 RandPos = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(2.0f, 3.0f), 20.0f);
 
-        Vector3 position = new Vector3(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f), 50.0f);
-        GameObject newSpawn = Instantiate(SpawnObjects[RandObj], position, Quaternion.identity);
+        GameObject newSpawn = Instantiate(SpawnObjects[RandObj], RandPos, Quaternion.identity);
 
-        //add force
+        newSpawn.GetComponent<Projectile>().GManager = this;
     }
 }

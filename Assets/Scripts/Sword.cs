@@ -17,6 +17,8 @@ public class Sword : MonoBehaviour
 
     void Update()
     {
+        //Debug.Log("Top: " + (transform.position + GetComponent<Collider>().bounds.max) + "Bottom: " + (transform.position + GetComponent<Collider>().bounds.min));
+
         // Bit shift the index of the layer (5) to get a bit mask
         // This casts rays only against colliders in layer 5.
         int layerMask = 1 << 5;
