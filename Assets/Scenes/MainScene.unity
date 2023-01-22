@@ -2062,6 +2062,7 @@ MonoBehaviour:
   MinY: 1
   MaxX: 1.5
   MaxY: 4
+  Speed: 2
 --- !u!1001 &1022636919
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3241,6 +3242,7 @@ MonoBehaviour:
   MinY: 1
   MaxX: 2
   MaxY: 5
+  Speed: 1
 --- !u!1 &1618968387
 GameObject:
   m_ObjectHideFlags: 0
