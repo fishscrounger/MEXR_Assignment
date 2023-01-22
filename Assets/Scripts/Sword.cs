@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class Sword : MonoBehaviour
 {
-    private bool Clicking = false;
-    private Button LastClicked;
-    private IEnumerator coroutine;
+    private Vector2 MovementInput;
 
     void Start()
     {
@@ -17,69 +15,14 @@ public class Sword : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log("Top: " + (transform.position + GetComponent<Collider>().bounds.max) + "Bottom: " + (transform.position + GetComponent<Collider>().bounds.min));
-
-        // Bit shift the index of the layer (5) to get a bit mask
-        // This casts rays only against colliders in layer 5.
-        int layerMask = 1 << 5;
-
-
-        RaycastHit hit;
-
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * 0.35f, Color.green);
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up * 0.35f), out hit, Mathf.Infinity, layerMask))
+        if (MovementInput.magnitude > 0.0f)
         {
-            if (!Clicking)
-            {
-                Debug.Log("Hit " + hit.collider.name);
-
-                Button btn = hit.collider.GetComponent<Button>();
-
-
-                if (btn)
-                {
-                    LastClicked = btn;
-                    Clicking = true;
-                    coroutine = IsClicking(btn);
-                    StartCoroutine(coroutine);
-                }
-            }
-        }
-        else
-        {
-            if (Clicking)
-            {
-                Clicking = false;
-                ColorBlock colors = LastClicked.colors;
-                colors.normalColor = Color.red;
-                LastClicked.colors = colors;
-                StopCoroutine(coroutine);
-                Debug.Log("No Hit");
-            }
+            transform.position += new Vector3(MovementInput.x * Time.deltaTime, MovementInput.y * Time.deltaTime, 0.0f);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Move(InputAction.CallbackContext context)
     {
-        if(other.tag == "UI")
-        {
-            Debug.Log("Intersecting " + other.name);
-        }
-    }
-
-    IEnumerator IsClicking(Button btn)
-    {
-        ColorBlock colors = btn.colors;
-        colors.normalColor = Color.green;
-        btn.colors = colors;
-
-        yield return new WaitForSeconds(1.0f);
-
-        colors.normalColor = Color.red;
-        btn.colors = colors;
-
-        if (Clicking)
-            btn.onClick.Invoke();   //invoke click behaviour as if clicking
-
+        MovementInput = context.ReadValue<Vector2>();
     }
 }

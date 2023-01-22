@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 public class GameManager : MonoBehaviour
 {
     public LimitedCameraMovement PlayerCam;
+    public Sword PlayerSword;
+
     public TextMeshProUGUI ScoreUI;
     public TextMeshProUGUI MultiplierUI;
     public TextMeshProUGUI TimeUI;
@@ -84,6 +86,8 @@ public class GameManager : MonoBehaviour
 
         IsPlaying = true;
 
+        PlayerSword.gameObject.SetActive(true);
+
         StartCoroutine(Spawn());
         StartCoroutine(ShowTips());
     }
@@ -107,8 +111,10 @@ public class GameManager : MonoBehaviour
         //hide tips
         TipUI.gameObject.SetActive(false);
 
-        //reset player position
+        //reset player and sword position and hide sword
         PlayerCam.transform.position = InitialPlayerPosition;
+        PlayerSword.gameObject.SetActive(false);
+        PlayerSword.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
     }
 
     public void QuitGame()
@@ -152,11 +158,19 @@ public class GameManager : MonoBehaviour
         newSpawn.GetComponent<Projectile>().GManager = this;
     }
 
-    public void Move(InputAction.CallbackContext context)
+    public void MoveCamera(InputAction.CallbackContext context)
     {
-        if(IsPlaying)
+        if (IsPlaying)
         {
             PlayerCam.Move(context);
+        }
+    }
+
+    public void MoveSword(InputAction.CallbackContext context)
+    {
+        if (IsPlaying)
+        {
+            PlayerSword.Move(context);
         }
     }
 }
