@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
+    public LimitedCameraMovement PlayerCam;
     public TextMeshProUGUI ScoreUI;
     public TextMeshProUGUI MultiplierUI;
     public TextMeshProUGUI TimeUI;
@@ -29,9 +31,11 @@ public class GameManager : MonoBehaviour
 
     public string[] MotivationTips;
 
+    private Vector3 InitialPlayerPosition;
+
     void Start()
     {
-        
+        InitialPlayerPosition = PlayerCam.transform.position;
     }
 
     void Update()
@@ -102,6 +106,9 @@ public class GameManager : MonoBehaviour
 
         //hide tips
         TipUI.gameObject.SetActive(false);
+
+        //reset player position
+        PlayerCam.transform.position = InitialPlayerPosition;
     }
 
     public void QuitGame()
@@ -143,5 +150,13 @@ public class GameManager : MonoBehaviour
         GameObject newSpawn = Instantiate(SpawnObjects[RandObj], RandPos, Quaternion.identity);
 
         newSpawn.GetComponent<Projectile>().GManager = this;
+    }
+
+    public void Move(InputAction.CallbackContext context)
+    {
+        if(IsPlaying)
+        {
+            PlayerCam.Move(context);
+        }
     }
 }
