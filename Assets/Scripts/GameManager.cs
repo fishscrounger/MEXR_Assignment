@@ -7,8 +7,8 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
-    public LimitedCameraMovement PlayerCam;
-    public Sword PlayerSword;
+    public LimitedMovement PlayerCam;
+    public LimitedMovement PlayerSword;
 
     public TextMeshProUGUI ScoreUI;
     public TextMeshProUGUI MultiplierUI;

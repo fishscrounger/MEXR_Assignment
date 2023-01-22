@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class LimitedCameraMovement : MonoBehaviour
+public class LimitedMovement : MonoBehaviour
 {
     public float MinX;
     public float MinY;
 
     public float MaxX;
     public float MaxY;
+
+    public float Speed;
 
     private Vector2 MovementInput;
 
@@ -24,7 +26,7 @@ public class LimitedCameraMovement : MonoBehaviour
     {
         if(MovementInput.magnitude > 0.0f)
         {
-            transform.position += new Vector3(MovementInput.x * Time.deltaTime, MovementInput.y * Time.deltaTime, 0.0f);
+            transform.position += new Vector3(MovementInput.x * Time.deltaTime * Speed, MovementInput.y * Time.deltaTime * Speed, 0.0f);
 
             if (transform.position.x > MaxX)
                 transform.position = new Vector3(MaxX, transform.position.y, transform.position.z);
